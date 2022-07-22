@@ -22,22 +22,35 @@ resource "aws_security_group" "prod_web" {
     from_port   = 80
     to_port     = 80
     protocol    = "tcp"
-    cidr_blocks = ["163.116.162.117/32"]
+    cidr_blocks = ["163.116.162.118/32"]
   }
 
   ingress {
     from_port   = 443
     to_port     = 443
     protocol    = "tcp"
-    cidr_blocks = ["163.116.162.117/32"]
+    cidr_blocks = ["163.116.162.118/32"]
   }
 
   egress {
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
-    cidr_blocks = ["163.116.162.117/32"]
+    cidr_blocks = ["163.116.162.118/32"]
   }
+
+  tags = {
+    Terraform = "true"
+  }
+}
+
+resource "aws_instance" "prod_web" {
+  ami           = "ami-0303d9db39b0722ac"
+  instance_type = "t2.nano"
+
+  vpc_security_group_ids = [
+    aws_security_group.prod_web.id
+  ]
 
   tags = {
     Terraform = "true"
